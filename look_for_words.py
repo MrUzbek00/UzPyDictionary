@@ -1,74 +1,134 @@
-import json
+from wordnet_lookup import WordNetLookup
 
-class UzPyDictionary:
-    _entry_cache = None
-    _synset_cache = None
+class UzPyDictionary(WordNetLookup):   
 
-    def __init__(self, entry_path="UzbekWordSet/entry.json", synset_path="UzbekWordSet/synset.json"):
-        if UzPyDictionary._entry_cache is None:
-            with open(entry_path, "r", encoding="utf-8") as f:
-                UzPyDictionary._entry_cache = json.load(f)
+    """Dictionary wrapper around WordNetLookup with helper output methods."""
 
-        if UzPyDictionary._synset_cache is None:
-            with open(synset_path, "r", encoding="utf-8") as f:
-                UzPyDictionary._synset_cache = json.load(f)
-
-        self.entry = UzPyDictionary._entry_cache
-        self.synset = UzPyDictionary._synset_cache
-
-    def find_words_by_wId(self, wId:str):
-        for item in self.entry:
-            if item["@id"] == wId:
-                return item["lemma"]["writtenForm"]
-            
-    def definition(self, word_id: str):
-        for item in self.synset:
-            if item["@id"] == word_id:
-                result= f"""{item["partOfSpeech"]} synonyms: {[self.find_words_by_wId(wId=wid) for wid in item["members"]]} definitions: {[gloss["gloss"] for gloss in item["definition"]]} 
-                    """
-                return result
-    
-    def get_all_ref_ids(self, ref_list):
-        # returns a list of synsetRef ID
-        ref_ids =list()
-        for item in ref_list:
-           ref_ids.append(item["synsetRef"])
-        
-        return ref_ids
-
-
-    
-    def look_for_word(self, word: str):
-        # looks for an object of a word and returns obj
-        for item in self.entry:
-            if item["lemma"]["writtenForm"] == word:
-                return item
-        return None
-    
-    
-    
     def demo_meaning(self, word: str):
+        """Print a detailed human-readable listing of senses for `word`.
+
+        Parameters:
+            word (str): the query word.
+
+        Returns:
+            None -- results are printed to stdout.
+        """
         obj = self.look_for_word(word)
-        ref_list = self.get_all_ref_ids(obj["sense"])
-
-        print(f"""
-{obj["lemma"]["writtenForm"]}
-{obj["partOfSpeech"]}""")
-        for definition in [self.definition(word_id=word_id) for word_id in ref_list]:
-            print(definition)
-
-
+        if obj!=False:
+            ref_list = self.get_all_ref_ids(obj["sense"])
+            print(f"""
+    {obj["lemma"]["writtenForm"]}({obj["partOfSpeech"]})""")
+            counter=1
+            for definition in [self.definition(word_id=word_id) for word_id in ref_list]:
+                print(counter)    
+                if definition["partOfSpeech"] != obj["partOfSpeech"]:
+                    print(definition["partOfSpeech"])
+                print("members: ", self.unlisting(members_list = definition["members"]))
+                print("definition: ", self.unlisting(definition["definitions"]))
+                print("=======================================================")
+                counter+=1
+        
+        else:
+            print(f"There is no such word: ",word)
     
+    def _meanings_core(self, word: str, limit: int | None = None):
+        """Return structured meanings for `word`.
+
+        Parameters:
+            word (str): the query word.
+            limit (int|None): max number of senses to return; None = all.
+
+        Returns:
+            dict: {
+                'word': str,
+                'part_of_speech': str|None,
+                'senses': list of { 'sense_id', 'partOfSpeech', 'members', 'definition' },
+                'error': str (only present if word not found)
+            }
+        """
+        obj = self.look_for_word(word)
+        if not obj:
+            return {
+                "word": word,
+                "part_of_speech": None,
+                "senses": [],
+                "error": f"There is no such word: {word}"
+            }
+
+        ref_list = self.get_all_ref_ids(obj["sense"])
+        if limit is not None:
+            ref_list = ref_list[:limit]
+
+        result = {
+            "word": obj["lemma"]["writtenForm"],
+            "part_of_speech": obj["partOfSpeech"],
+            "senses": []
+        }
+
+        for idx, word_id in enumerate(ref_list, start=1):
+            definition = self.definition(word_id=word_id)
+
+            # POS (fallback to main POS if missing)
+            pos = definition.get("partOfSpeech", obj["partOfSpeech"])
+
+            # members normalize
+            members = definition.get("members") or []
+            if not isinstance(members, list):
+                members = [members]
+            members_list = [str(m).strip() for m in members if str(m).strip()]
+
+            # definitions normalize (handle list/string/dict)
+            defs = definition.get("definitions") or definition.get("definition") or ""
+            if isinstance(defs, list):
+                parts = []
+                for x in defs:
+                    if isinstance(x, dict):
+                        parts.append(str(x.get("gloss", "")).strip())
+                    else:
+                        parts.append(str(x).strip())
+                definition_text = "; ".join([p for p in parts if p])
+            elif isinstance(defs, dict):
+                definition_text = str(defs.get("gloss", "")).strip()
+            else:
+                definition_text = str(defs).strip()
+
+            result["senses"].append({
+                "sense_id": idx,
+                "partOfSpeech": pos,
+                "members": members_list,
+                "definition": definition_text
+            })
+
+        return result
+
+
+    def meanings(self, word: str):
+        """Return all senses for `word`.
+
+        Parameters:
+            word (str): the query word.
+
+        Returns:
+            dict: same structure as returned by _meanings_core with limit=None.
+        """
+        # all senses
+        return self._meanings_core(word, limit=None)
+
+
+    def meaning(self, word: str):
+        """Return the first sense for `word`.
+
+        Parameters:
+            word (str): the query word.
+
+        Returns:
+            dict: same structure as _meanings_core but containing at most one sense.
+        """
+        # first sense only
+        return self._meanings_core(word, limit=1)
 
 
 d = UzPyDictionary()
-# print(d.look_for_word("kitob"))
 
-# print("all ids")
-# sense= [{'@id': 'uzwordnet-2870092-n-1', 'synsetRef': 'uzwordnet-2870092-n'}, {'@id': 'uzwordnet-2870526-n-1', 'synsetRef': 'uzwordnet-2870526-n'}, {'@id': 'uzwordnet-6394865-n-1', 'synsetRef': 'uzwordnet-6394865-n'}, {'@id': 'uzwordnet-6410904-n-1', 'synsetRef': 'uzwordnet-6410904-n'}, {'@id': 'uzwordnet-6636524-n-1', 'synsetRef': 'uzwordnet-6636524-n'}, {'@id': 'uzwordnet-7009946-n-3', 'synsetRef': 'uzwordnet-7009946-n'}, {'@id': 'uzwordnet-7954211-n-1', 'synsetRef': 'uzwordnet-7954211-n'}, {'@id': 'uzwordnet-7954441-n-1', 'synsetRef': 'uzwordnet-7954441-n'}, {'@id': 'uzwordnet-9812068-n-2', 'synsetRef': 'uzwordnet-9812068-n'}, {'@id': 'uzwordnet-13404248-n-1', 'synsetRef': 'uzwordnet-13404248-n'}, {'@id': 'uzwordnet-1111418-s-1', 'synsetRef': 'uzwordnet-1111418-s'}]
-# print(d.get_all_ref_ids(ref_list=sense))
-
-# print("definition")
-# print(d.definition(word_id="uzwordnet-2870092-n"))
-
-d.demo_meaning(word="kitob")
+# d.demo_meaning(word="singil")
+print(d.meanings("kitob"))
