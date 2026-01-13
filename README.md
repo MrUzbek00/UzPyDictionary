@@ -1,3 +1,7 @@
+![Static Badge](https://img.shields.io/badge/Licance_-MIT-orange) ![Static Badge](https://img.shields.io/badge/Python-3.8%2B-success?style=flat&logo=python&logoColor=orange&labelColor=blue) ![Static Badge](https://img.shields.io/badge/Version-0.1-success?style=flat&labelColor=blue)
+---
+
+
 # 🧠 UzDct  
 ### Uzbek WordSet & Lightweight NLP Toolkit
 
@@ -10,7 +14,7 @@ No heavy frameworks. No remote APIs. Just JSON, Python, and control.
 
 ## ✨ Why UzDct?
 
-- 🇺🇿 Focused on the **Uzbek language**
+- 🇺🇿  Focused on the **Uzbek language**
 - ⚡ Fast, **JSON-backed** word & synset lookups
 - 🧩 WordNet-style **senses, synsets, and relations**
 - 🧪 Perfect for **NLP experiments**, bots, and research
