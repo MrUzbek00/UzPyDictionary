@@ -1,132 +1,176 @@
-# UzDct — Uzbek WordSet & NLP Tools
+# 🧠 UzDct  
+### Uzbek WordSet & Lightweight NLP Toolkit
 
-A small, local toolkit for exploring an Uzbek WordNet-style dataset and simple NLP helpers.
+> A fast, local, WordNet-style toolkit for exploring Uzbek lexical data — built for hackers, linguists, and NLP experimenters.
 
-This repository contains a lightweight WordNet lookup implementation, helper functions to query words and senses, and an example script that introspects an UzbekNLP package.
-
----
-
-## Features
-
-- Fast JSON-backed lookup of word entries and synsets
-- Friendly helpers to get definitions, members, and relations
-- Example scripts to print human-readable meanings and programmatic outputs
-- Bilingual README and clear structure for quick experimentation
+UzDct is a **minimal but powerful** Python toolkit that lets you explore an Uzbek WordNet-style dataset using simple, clean APIs.  
+No heavy frameworks. No remote APIs. Just JSON, Python, and control.
 
 ---
 
-## Quickstart
+## ✨ Why UzDct?
 
-1. Ensure you have Python 3.8+ and dependencies installed (if any listed in requirements.txt):
+- 🇺🇿 Focused on the **Uzbek language**
+- ⚡ Fast, **JSON-backed** word & synset lookups
+- 🧩 WordNet-style **senses, synsets, and relations**
+- 🧪 Perfect for **NLP experiments**, bots, and research
+- 📦 Small, hackable, and easy to extend
+
+---
+
+## 🚀 Features
+
+✔ Word → senses → definitions  
+✔ Synsets with relations (hypernyms, hyponyms, etc.)  
+✔ Human-readable **and** programmatic outputs  
+✔ Zero network dependency  
+✔ Bilingual documentation (EN / UZ)
+
+---
+
+## 📦 Installation
 
 ```bash
 pip install -r UzbekWordSet/requirements.txt
 ```
 
-2. Run the example lookup script:
+---
 
-```bash
-python "UzbekWordSet/look_for_words.py"
-```
-
-3. Import the lookup class in your own code:
+## ⚡ Quick Start
 
 ```python
 from UzbekWordSet.look_for_words import UzPyDictionary
 
 d = UzPyDictionary()
-print(d.meanings('kitob'))
+print(d.meanings("kitob"))
 ```
 
 ---
 
-## File layout (important files)
+## 🗂 Project Structure
 
-- UzbekWordSet/
-  - wordNet_lookup.py — core JSON-backed lookup (entry & synset readers, helpers)
-  - look_for_words.py — UzPyDictionary wrapper with human-friendly output and structured meanings
-  - resources/entry.json — lexical entries
-  - resources/synset.json — synset records and definitions
-  - requirements.txt — minimal dependencies
-
----
-
-## Usage tips
-
-- Use `UzPyDictionary.meanings(word)` to get all senses in a structured dict.
-- Use `UzPyDictionary.meaning(word)` to get only the first sense.
-- `look_for_words.demo_meaning(word)` prints a human-readable breakdown.
-- The JSON files are the source of truth — you can inspect them directly for more context.
+```
+UzbekWordSet/
+├── wordNet_lookup.py
+├── look_for_words.py
+├── resources/
+│   ├── entry.json
+│   └── synset.json
+└── requirements.txt
+```
 
 ---
 
-## Contributing
+## 📜 License
 
-- Add issues describing bugs or feature requests.
-- Keep changes small and focused; prefer adding tests or example scripts.
-- If you expand the dataset, keep the same structure for entry.json and synset.json.
+Informal / experimental. Add a LICENSE file if publishing.
 
 ---
 
-## License & Contact
+# 🧠 UzDct  
+### O‘zbek WordSet va yengil NLP asboblari
 
-This project is informal and intended for learning / experimentation. Add a LICENSE file if you intend to share or publish.
+> O‘zbek tili uchun WordNet uslubidagi leksik ma’lumotlarni o‘rganishga mo‘ljallangan tezkor va lokal Python asboblar to‘plami.
 
-For questions or quick help, open an issue or contact the repository owner.
+UzDct — bu **kichik, ammo kuchli** Python kutubxonasi bo‘lib, u o‘zbek tilidagi WordNet-ga o‘xshash ma’lumotlar bilan ishlash imkonini beradi.  
+Og‘ir frameworklar yo‘q. Internetga bog‘liqlik yo‘q. Faqat JSON, Python va to‘liq nazorat.
 
 ---
 
-# O'zbekcha (Uzbek)
+## ✨ Nega UzDct?
 
-UzDct — Oʻzbek soʻz toʻplami va oddiy NLP yordamchilari uchun kichik asbob toʻplami.
+- 🇺🇿 **O‘zbek tiliga** yo‘naltirilgan
+- ⚡ Tezkor, **JSON asosida** ishlaydi
+- 🧩 WordNet uslubidagi **ma’nolar, sinsetlar va munosabatlar**
+- 🧪 NLP tajribalar, botlar va tadqiqotlar uchun qulay
+- 📦 Kichik, moslashuvchan va kengaytirish oson
 
-Ushbu loyiha WordNet uslubidagi Oʻzbek lugʻat maʼlumotlarini JSON formatida saqlaydi va ulardan foydalanish uchun qulay yordamchi funksiyalarni taqdim etadi.
+---
 
-## Xususiyatlar
+## 🚀 Imkoniyatlar
 
-- JSON fayllarga asoslangan tezkor soʻz va sinset qidiruvi
-- Taʼriflar, aʼzolar va munosabatlarni qaytaruvchi yordamchilar
-- Namuna skriptlar: inson oʻqishi uchun chiqarish va dasturiy natija olish
+✔ So‘z → ma’nolar → ta’riflar  
+✔ Sinsetlar va ularning munosabatlari (hypernym, hyponym va boshqalar)  
+✔ Inson o‘qishi uchun qulay **va** dasturiy natijalar  
+✔ Internet talab qilinmaydi  
+✔ Ikki tilli hujjat (EN / UZ)
 
-## Boshlash
+---
 
-1. Python 3.8+ oʻrnatilganligiga ishonch hosil qiling va kerakli kutubxonalarni oʻrnating:
+## 📦 O‘rnatish
+
+Python **3.8+** o‘rnatilganligiga ishonch hosil qiling.
 
 ```bash
 pip install -r UzbekWordSet/requirements.txt
 ```
 
-2. Namuna skriptni ishga tushiring:
+---
 
-```bash
-python "UzbekWordSet/look_for_words.py"
-```
-
-3. Kutubxonani o'z loyihangizda ishlating:
+## ⚡ Tez boshlash
 
 ```python
 from UzbekWordSet.look_for_words import UzPyDictionary
 
 d = UzPyDictionary()
-print(d.meanings('kitob'))
+print(d.meanings("kitob"))
 ```
-
-## Fayl tuzilishi
-
-- UzbekWordSet/
-  - wordNet_lookup.py — asosiy JSON qidiruv kodi
-  - look_for_words.py — UzPyDictionary o'rab oluvchi va formati berilgan natija
-  - resources/entry.json — leksik yozuvlar
-  - resources/synset.json — sinset yozuvlari va ta'riflari
-  - requirements.txt — minimal bog'liqliklar
-
-## Foydalanish bo'yicha maslahatlar
-
-- Barcha ma'nolar uchun: `UzPyDictionary.meanings(word)`
-- Faqat birinchi maʼno uchun: `UzPyDictionary.meaning(word)`
-- Inson o'qishi uchun: `demo_meaning(word)`
-- JSON fayllarni to'g'ridan-to'g'ri tekshirib, qo'shimcha kontekst oling.
 
 ---
 
-Rahmat! Loyihani rivojlantirish yoki savollar uchun issue oching yoki egasi bilan bog'laning.
+## 🗂 Loyiha tuzilishi
+
+```
+UzbekWordSet/
+├── wordNet_lookup.py      # Asosiy JSON qidiruv mexanizmi
+├── look_for_words.py      # Qulay o‘ram (UzPyDictionary)
+├── resources/
+│   ├── entry.json         # Leksik yozuvlar
+│   └── synset.json        # Sinsetlar va ta’riflar
+└── requirements.txt
+```
+
+📌 **JSON fayllar — asosiy manba.**  
+Qolgan hamma narsa — ular ustidagi qulay interfeys.
+
+---
+
+## 🧪 Nimalar qilish mumkin?
+
+- 🤖 Telegram / Discord botlar  
+- 📚 Lug‘at va til o‘rganish ilovalari  
+- 🔍 Lingvistik tahlil skriptlari  
+- 🧠 NLP oldindan qayta ishlash jarayonlari  
+- 🧪 Ilmiy yoki shaxsiy tadqiqotlar  
+
+Bu “katta korporativ NLP” emas.  
+Bu — **aniqlik, tezlik va nazorat**.
+
+---
+
+## 🛠 Hissa qo‘shish
+
+Loyihani rivojlantirmoqchimisiz?
+
+- 🐞 Xatoliklar uchun issue oching
+- 🧩 O‘zgarishlarni kichik va aniq qiling
+- 🧪 Testlar yoki namuna skriptlar qo‘shing
+- 📐 JSON tuzilmasini saqlab qoling
+
+Minimalizm > murakkablik.
+
+---
+
+## 📜 Litsenziya
+
+Hozircha loyiha **norasmiy va tajriba uchun** mo‘ljallangan.  
+Agar ommaviy tarqatmoqchi bo‘lsangiz, LICENSE fayl qo‘shing.
+
+---
+
+## Xulosa
+
+UzDct — bu **o‘rganish, tajriba va chuqur tushunish** uchun yaratilgan loyiha.  
+Agar siz o‘zbek tili bilan NLP qilishni jiddiy xohlasangiz — shu yerdan boshlang.
+
+---
